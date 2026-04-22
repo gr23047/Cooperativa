@@ -1,2 +1,8 @@
-com/cooperativa/cooperativa/clases/Cuenta.class
+com/cooperativa/cooperativa/persistencia/CuentaJpaController.class
+com/cooperativa/cooperativa/persistencia/exceptions/IllegalOrphanException.class
+com/cooperativa/cooperativa/control/Controladora.class
+com/cooperativa/cooperativa/persistencia/exceptions/PreexistingEntityException.class
 com/cooperativa/cooperativa/Cooperativa.class
+com/cooperativa/cooperativa/persistencia/ControlPersist.class
+com/cooperativa/cooperativa/persistencia/exceptions/NonexistentEntityException.class
+com/cooperativa/cooperativa/control/Cuenta.class
