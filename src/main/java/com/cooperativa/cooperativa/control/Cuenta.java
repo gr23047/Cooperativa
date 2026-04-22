@@ -14,7 +14,7 @@ public class Cuenta implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  
+  private String codigo;
   @Column(nullable = false)
   private String nombre;
   
@@ -26,14 +26,17 @@ public class Cuenta implements Serializable {
     @Column(name = "activa")
     private Boolean activa = true;
 
-    public Cuenta(Integer id, String nombre, String tipo, String naturaleza, String clasificacion, Integer nivel) {
+    public Cuenta(Integer id, String codigo, String nombre, String tipo, String naturaleza, String clasificacion, Integer nivel) {
         this.id = id;
+        this.codigo = codigo;
         this.nombre = nombre;
         this.tipo = tipo;
         this.naturaleza = naturaleza;
         this.clasificacion = clasificacion;
         this.nivel = nivel;
     }
+
+  
 
     public Cuenta() {
     }
@@ -92,6 +95,14 @@ public class Cuenta implements Serializable {
 
     public void setActiva(Boolean activa) {
         this.activa = activa;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
     
     

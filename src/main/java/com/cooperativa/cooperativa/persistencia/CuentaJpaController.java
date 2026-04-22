@@ -27,10 +27,11 @@ public class CuentaJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-     public CuentaJpaController() {
+   
+    public CuentaJpaController() {
         this.emf =Persistence.createEntityManagerFactory("cooperativaPU");
     }
-    
+      
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
