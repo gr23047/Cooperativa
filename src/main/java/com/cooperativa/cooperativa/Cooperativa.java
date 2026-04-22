@@ -15,7 +15,6 @@ public class Cooperativa {
         cuenta.setClasificacion("Balance");
         cuenta.setNivel(4);
         cuenta.setActiva(true);
-        
         control.crearCuenta(cuenta);
     }
 }
