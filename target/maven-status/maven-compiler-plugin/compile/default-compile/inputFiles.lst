@@ -1,6 +1,8 @@
 /home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/Cooperativa.java
 /home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/control/Controladora.java
 /home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/control/Cuenta.java
+/home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/igu/Principal.java
+/home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/igu/frmCuentas.java
 /home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/persistencia/ControlPersist.java
 /home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/persistencia/CuentaJpaController.java
 /home/godofredo/Escritorio/Sistemas Contables/Cooperativa/src/main/java/com/cooperativa/cooperativa/persistencia/exceptions/IllegalOrphanException.java
