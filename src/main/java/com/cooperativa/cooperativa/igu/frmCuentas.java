@@ -6,8 +6,12 @@ package com.cooperativa.cooperativa.igu;
 
 import com.cooperativa.cooperativa.control.Controladora;
 import com.cooperativa.cooperativa.control.Cuenta;
+import java.awt.Component;
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -16,8 +20,8 @@ import javax.swing.table.DefaultTableModel;
 public class frmCuentas extends javax.swing.JFrame {
 
     DefaultTableModel modelo = new DefaultTableModel();
-    String encabezados[] = { "Id", "Codigo", "Nombre", "Tipo", "Naturalez", "Clasificacion",
-            "Nivel", "Activa"
+    String encabezados[] = {"Id", "Codigo", "Nombre", "Tipo", "Naturaleza", "Clasificacion",
+        "Nivel", "Activa"
     };
     Controladora control = new Controladora();
 
@@ -27,18 +31,47 @@ public class frmCuentas extends javax.swing.JFrame {
         modelo.setColumnIdentifiers(encabezados);
         tblCuentas.setModel(modelo);
         cargarCuentas();
+        ajustarColumnas(tblCuentas);
+
+     
     }
 
     public void cargarCuentas() {
         List<Cuenta> cuentas = control.verCuentas();
         for (Cuenta cuenta : cuentas) {
-            modelo.addRow(new Object[] {
-                    cuenta.getId(), cuenta.getCodigo(), cuenta.getNombre(), cuenta.getTipo(),
-                    cuenta.getNaturaleza(), cuenta.getClasificacion(), cuenta.getNivel(), cuenta.getActiva()
+            modelo.addRow(new Object[]{
+                cuenta.getId(), cuenta.getCodigo(), cuenta.getNombre(), cuenta.getTipo(),
+                cuenta.getNaturaleza(), cuenta.getClasificacion(), cuenta.getNivel(), cuenta.getActiva()
             });
             tblCuentas.setModel(modelo);
         }
     }
+
+   public static void ajustarColumnas(JTable tabla) {
+    for (int col = 0; col < tabla.getColumnCount(); col++) {
+        int maxAncho = 0;
+
+        // Medir el encabezado
+        TableColumn columna = tabla.getColumnModel().getColumn(col);
+        TableCellRenderer headerRenderer = tabla.getTableHeader().getDefaultRenderer();
+        Component headerComp = headerRenderer.getTableCellRendererComponent(
+            tabla, columna.getHeaderValue(), false, false, 0, col
+        );
+        maxAncho = headerComp.getPreferredSize().width;
+
+        // Medir cada celda
+        for (int fila = 0; fila < tabla.getRowCount(); fila++) {
+            TableCellRenderer renderer = tabla.getCellRenderer(fila, col);
+            Component comp = tabla.prepareRenderer(renderer, fila, col);
+            int ancho = comp.getPreferredSize().width + 10; // margen
+            maxAncho = Math.max(maxAncho, ancho);
+        }
+
+        columna.setPreferredWidth(maxAncho);
+    }
+
+    tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,7 +80,7 @@ public class frmCuentas extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -60,19 +93,19 @@ public class frmCuentas extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 585,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(16, Short.MAX_VALUE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(87, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap()));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(144, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
