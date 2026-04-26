@@ -33,7 +33,6 @@ public class frmCuentas extends javax.swing.JFrame {
         cargarCuentas();
         ajustarColumnas(tblCuentas);
 
-     
     }
 
     public void cargarCuentas() {
@@ -47,31 +46,31 @@ public class frmCuentas extends javax.swing.JFrame {
         }
     }
 
-   public static void ajustarColumnas(JTable tabla) {
-    for (int col = 0; col < tabla.getColumnCount(); col++) {
-        int maxAncho = 0;
+    public static void ajustarColumnas(JTable tabla) {
+        for (int col = 0; col < tabla.getColumnCount(); col++) {
+            int maxAncho = 0;
 
-        // Medir el encabezado
-        TableColumn columna = tabla.getColumnModel().getColumn(col);
-        TableCellRenderer headerRenderer = tabla.getTableHeader().getDefaultRenderer();
-        Component headerComp = headerRenderer.getTableCellRendererComponent(
-            tabla, columna.getHeaderValue(), false, false, 0, col
-        );
-        maxAncho = headerComp.getPreferredSize().width;
+            // Medir el encabezado
+            TableColumn columna = tabla.getColumnModel().getColumn(col);
+            TableCellRenderer headerRenderer = tabla.getTableHeader().getDefaultRenderer();
+            Component headerComp = headerRenderer.getTableCellRendererComponent(
+                    tabla, columna.getHeaderValue(), false, false, 0, col
+            );
+            maxAncho = headerComp.getPreferredSize().width;
 
-        // Medir cada celda
-        for (int fila = 0; fila < tabla.getRowCount(); fila++) {
-            TableCellRenderer renderer = tabla.getCellRenderer(fila, col);
-            Component comp = tabla.prepareRenderer(renderer, fila, col);
-            int ancho = comp.getPreferredSize().width + 10; // margen
-            maxAncho = Math.max(maxAncho, ancho);
+            // Medir cada celda
+            for (int fila = 0; fila < tabla.getRowCount(); fila++) {
+                TableCellRenderer renderer = tabla.getCellRenderer(fila, col);
+                Component comp = tabla.prepareRenderer(renderer, fila, col);
+                int ancho = comp.getPreferredSize().width + 10; // margen
+                maxAncho = Math.max(maxAncho, ancho);
+            }
+
+            columna.setPreferredWidth(maxAncho);
         }
 
-        columna.setPreferredWidth(maxAncho);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     }
-
-    tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,32 +82,150 @@ public class frmCuentas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btngFiltro = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCuentas = new javax.swing.JTable();
+        rbtnPatrimonio = new javax.swing.JRadioButton();
+        rbtnGasto = new javax.swing.JRadioButton();
+        rbtnIngreso = new javax.swing.JRadioButton();
+        rbtnActivo = new javax.swing.JRadioButton();
+        rbtnPasivo = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jScrollPane1.setViewportView(tblCuentas);
+
+        btngFiltro.add(rbtnPatrimonio);
+        rbtnPatrimonio.setText("Patrimonio");
+        rbtnPatrimonio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnPatrimonioActionPerformed(evt);
+            }
+        });
+
+        btngFiltro.add(rbtnGasto);
+        rbtnGasto.setText("Gasto");
+        rbtnGasto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnGastoActionPerformed(evt);
+            }
+        });
+
+        btngFiltro.add(rbtnIngreso);
+        rbtnIngreso.setText("Ingreso");
+        rbtnIngreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnIngresoActionPerformed(evt);
+            }
+        });
+
+        btngFiltro.add(rbtnActivo);
+        rbtnActivo.setText("Activo");
+        rbtnActivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnActivoActionPerformed(evt);
+            }
+        });
+
+        btngFiltro.add(rbtnPasivo);
+        rbtnPasivo.setText("Pasivo");
+        rbtnPasivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnPasivoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(rbtnIngreso)
+                        .addGap(79, 79, 79)
+                        .addComponent(rbtnGasto))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(192, 192, 192)
+                        .addComponent(rbtnPasivo, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rbtnPatrimonio, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(89, 89, 89)
+                    .addComponent(rbtnActivo, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(480, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(144, Short.MAX_VALUE)
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rbtnPatrimonio)
+                    .addComponent(rbtnPasivo))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rbtnGasto)
+                    .addComponent(rbtnIngreso))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(44, 44, 44)
+                    .addComponent(rbtnActivo)
+                    .addContainerGap(422, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void rbtnPatrimonioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnPatrimonioActionPerformed
+        modelo.setRowCount(0);
+        List<Cuenta> patrimonio = control.cuentasTipo("Patrimonio");
+        llenarTabla(patrimonio, modelo);
+
+
+    }//GEN-LAST:event_rbtnPatrimonioActionPerformed
+
+    public void llenarTabla(List<Cuenta> datos, DefaultTableModel modelo) {
+        for (Cuenta cuenta : datos) {
+            modelo.addRow(new Object[]{
+                cuenta.getId(), cuenta.getCodigo(), cuenta.getNombre(), cuenta.getTipo(),
+                cuenta.getNaturaleza(), cuenta.getClasificacion(), cuenta.getNivel(), cuenta.getActiva()
+            });
+            tblCuentas.setModel(modelo);
+        }
+    }
+
+    private void rbtnIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnIngresoActionPerformed
+        modelo.setRowCount(0);
+        List<Cuenta> ingreso = control.cuentasTipo("Ingreso");
+        llenarTabla(ingreso, modelo);
+    }//GEN-LAST:event_rbtnIngresoActionPerformed
+
+    private void rbtnActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnActivoActionPerformed
+        modelo.setRowCount(0);
+        List<Cuenta> activo = control.cuentasTipo("Activo");
+        llenarTabla(activo, modelo);
+    }//GEN-LAST:event_rbtnActivoActionPerformed
+
+    private void rbtnPasivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnPasivoActionPerformed
+        modelo.setRowCount(0);
+        List<Cuenta> pasivo = control.cuentasTipo("Pasivo");
+        llenarTabla(pasivo, modelo);
+    }//GEN-LAST:event_rbtnPasivoActionPerformed
+
+    private void rbtnGastoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnGastoActionPerformed
+        modelo.setRowCount(0);
+        List<Cuenta> gasto = control.cuentasTipo("Gasto");
+        llenarTabla(gasto, modelo);
+    }//GEN-LAST:event_rbtnGastoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,7 +272,13 @@ public class frmCuentas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btngFiltro;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbtnActivo;
+    private javax.swing.JRadioButton rbtnGasto;
+    private javax.swing.JRadioButton rbtnIngreso;
+    private javax.swing.JRadioButton rbtnPasivo;
+    private javax.swing.JRadioButton rbtnPatrimonio;
     private javax.swing.JTable tblCuentas;
     // End of variables declaration//GEN-END:variables
 }

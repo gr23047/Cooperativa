@@ -15,4 +15,8 @@ public class ControlPersist {
     public List<Cuenta> verCuentas() {
         return cuentaJPA.findCuentaEntities();
     }
+
+    public List<Cuenta> cuentasTipo(String tipo) {
+        return cuentaJPA.findCuentasByTipo(tipo);
+    }
 }

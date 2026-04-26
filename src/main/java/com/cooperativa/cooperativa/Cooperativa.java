@@ -9,7 +9,7 @@ public class Cooperativa {
 //        Controladora control=new Controladora();
 //        Cuenta cuenta=new Cuenta();
 //        cuenta.setCodigo("1001010101");
-//        cuenta.setNombre("SHUA");
+//        cuenta.setNombre("Cuenta prueba");
 //        cuenta.setTipo("Gasto");
 //        cuenta.setNaturaleza("Deudora");
 //        cuenta.setClasificacion("Balance");

@@ -15,4 +15,8 @@ public class Controladora {
     public List<Cuenta> verCuentas() {
         return controlPersist.verCuentas();
     }
+
+    public List<Cuenta> cuentasTipo(String tipo) {
+        return controlPersist.cuentasTipo(tipo);
+    }
 }

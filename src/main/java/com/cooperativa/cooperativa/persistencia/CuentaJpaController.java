@@ -27,15 +27,13 @@ public class CuentaJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-   
     public CuentaJpaController() {
-        emf =Persistence.createEntityManagerFactory("cooperativaPU");
+        emf = Persistence.createEntityManagerFactory("cooperativaPU");
     }
-      
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
 
     public void create(Cuenta cuenta) {
         EntityManager em = null;
@@ -140,5 +138,19 @@ public class CuentaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Cuenta> findCuentasByTipo(String tipo) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT c FROM Cuenta c WHERE c.tipo = :tipo ORDER BY c.codigo",
+                    Cuenta.class
+            )
+                    .setParameter("tipo", tipo)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }
