@@ -1,30 +1,37 @@
 package com.cooperativa.cooperativa.control;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "cuentas")
 public class Cuenta implements Serializable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-  private String codigo;
-  @Column(nullable = false)
-  private String nombre;
-  
-    private String tipo; 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String codigo;
+    @Column(nullable = false)
+    private String nombre;
+
+    private String tipo;
     private String naturaleza;
     private String clasificacion;
     private Integer nivel;
-    
+
     @Column(name = "activa")
     private Boolean activa = true;
+
+    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL)
+    private List<Partida> partidas;
 
     public Cuenta(Integer id, String codigo, String nombre, String tipo, String naturaleza, String clasificacion, Integer nivel) {
         this.id = id;
@@ -35,8 +42,6 @@ public class Cuenta implements Serializable {
         this.clasificacion = clasificacion;
         this.nivel = nivel;
     }
-
-  
 
     public Cuenta() {
     }
@@ -104,7 +109,14 @@ public class Cuenta implements Serializable {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
+    public List<Partida> getPartidas() {
+        return partidas;
+    }
+
+    public void setPartidas(List<Partida> partidas) {
+        this.partidas = partidas;
+    }
+
     
-    
-   
 }
