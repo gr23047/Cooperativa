@@ -4,12 +4,13 @@
  */
 package com.cooperativa.cooperativa.persistencia;
 
-import com.cooperativa.cooperativa.control.Cuenta;
+import com.cooperativa.cooperativa.control.Asiento;
 import java.io.Serializable;
 import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import com.cooperativa.cooperativa.control.Periodo;
 import com.cooperativa.cooperativa.control.Partida;
 import com.cooperativa.cooperativa.persistencia.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
@@ -22,42 +23,51 @@ import java.util.List;
  *
  * @author godofredo
  */
-public class CuentaJpaController implements Serializable {
+public class AsientoJpaController implements Serializable {
 
-    public CuentaJpaController(EntityManagerFactory emf) {
+    public AsientoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 
-    public CuentaJpaController(){
+     public AsientoJpaController(){
         emf=Persistence.createEntityManagerFactory("cooperativaPU");
     }
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Cuenta cuenta) {
-        if (cuenta.getPartidas() == null) {
-            cuenta.setPartidas(new ArrayList<Partida>());
+    public void create(Asiento asiento) {
+        if (asiento.getPartidas() == null) {
+            asiento.setPartidas(new ArrayList<Partida>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Periodo periodo = asiento.getPeriodo();
+            if (periodo != null) {
+                periodo = em.getReference(periodo.getClass(), periodo.getId());
+                asiento.setPeriodo(periodo);
+            }
             List<Partida> attachedPartidas = new ArrayList<Partida>();
-            for (Partida partidasPartidaToAttach : cuenta.getPartidas()) {
+            for (Partida partidasPartidaToAttach : asiento.getPartidas()) {
                 partidasPartidaToAttach = em.getReference(partidasPartidaToAttach.getClass(), partidasPartidaToAttach.getId());
                 attachedPartidas.add(partidasPartidaToAttach);
             }
-            cuenta.setPartidas(attachedPartidas);
-            em.persist(cuenta);
-            for (Partida partidasPartida : cuenta.getPartidas()) {
-                Cuenta oldCuentaOfPartidasPartida = partidasPartida.getCuenta();
-                partidasPartida.setCuenta(cuenta);
+            asiento.setPartidas(attachedPartidas);
+            em.persist(asiento);
+            if (periodo != null) {
+                periodo.getAsientos().add(asiento);
+                periodo = em.merge(periodo);
+            }
+            for (Partida partidasPartida : asiento.getPartidas()) {
+                Asiento oldAsientoOfPartidasPartida = partidasPartida.getAsiento();
+                partidasPartida.setAsiento(asiento);
                 partidasPartida = em.merge(partidasPartida);
-                if (oldCuentaOfPartidasPartida != null) {
-                    oldCuentaOfPartidasPartida.getPartidas().remove(partidasPartida);
-                    oldCuentaOfPartidasPartida = em.merge(oldCuentaOfPartidasPartida);
+                if (oldAsientoOfPartidasPartida != null) {
+                    oldAsientoOfPartidasPartida.getPartidas().remove(partidasPartida);
+                    oldAsientoOfPartidasPartida = em.merge(oldAsientoOfPartidasPartida);
                 }
             }
             em.getTransaction().commit();
@@ -68,36 +78,50 @@ public class CuentaJpaController implements Serializable {
         }
     }
 
-    public void edit(Cuenta cuenta) throws NonexistentEntityException, Exception {
+    public void edit(Asiento asiento) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cuenta persistentCuenta = em.find(Cuenta.class, cuenta.getId());
-            List<Partida> partidasOld = persistentCuenta.getPartidas();
-            List<Partida> partidasNew = cuenta.getPartidas();
+            Asiento persistentAsiento = em.find(Asiento.class, asiento.getId());
+            Periodo periodoOld = persistentAsiento.getPeriodo();
+            Periodo periodoNew = asiento.getPeriodo();
+            List<Partida> partidasOld = persistentAsiento.getPartidas();
+            List<Partida> partidasNew = asiento.getPartidas();
+            if (periodoNew != null) {
+                periodoNew = em.getReference(periodoNew.getClass(), periodoNew.getId());
+                asiento.setPeriodo(periodoNew);
+            }
             List<Partida> attachedPartidasNew = new ArrayList<Partida>();
             for (Partida partidasNewPartidaToAttach : partidasNew) {
                 partidasNewPartidaToAttach = em.getReference(partidasNewPartidaToAttach.getClass(), partidasNewPartidaToAttach.getId());
                 attachedPartidasNew.add(partidasNewPartidaToAttach);
             }
             partidasNew = attachedPartidasNew;
-            cuenta.setPartidas(partidasNew);
-            cuenta = em.merge(cuenta);
+            asiento.setPartidas(partidasNew);
+            asiento = em.merge(asiento);
+            if (periodoOld != null && !periodoOld.equals(periodoNew)) {
+                periodoOld.getAsientos().remove(asiento);
+                periodoOld = em.merge(periodoOld);
+            }
+            if (periodoNew != null && !periodoNew.equals(periodoOld)) {
+                periodoNew.getAsientos().add(asiento);
+                periodoNew = em.merge(periodoNew);
+            }
             for (Partida partidasOldPartida : partidasOld) {
                 if (!partidasNew.contains(partidasOldPartida)) {
-                    partidasOldPartida.setCuenta(null);
+                    partidasOldPartida.setAsiento(null);
                     partidasOldPartida = em.merge(partidasOldPartida);
                 }
             }
             for (Partida partidasNewPartida : partidasNew) {
                 if (!partidasOld.contains(partidasNewPartida)) {
-                    Cuenta oldCuentaOfPartidasNewPartida = partidasNewPartida.getCuenta();
-                    partidasNewPartida.setCuenta(cuenta);
+                    Asiento oldAsientoOfPartidasNewPartida = partidasNewPartida.getAsiento();
+                    partidasNewPartida.setAsiento(asiento);
                     partidasNewPartida = em.merge(partidasNewPartida);
-                    if (oldCuentaOfPartidasNewPartida != null && !oldCuentaOfPartidasNewPartida.equals(cuenta)) {
-                        oldCuentaOfPartidasNewPartida.getPartidas().remove(partidasNewPartida);
-                        oldCuentaOfPartidasNewPartida = em.merge(oldCuentaOfPartidasNewPartida);
+                    if (oldAsientoOfPartidasNewPartida != null && !oldAsientoOfPartidasNewPartida.equals(asiento)) {
+                        oldAsientoOfPartidasNewPartida.getPartidas().remove(partidasNewPartida);
+                        oldAsientoOfPartidasNewPartida = em.merge(oldAsientoOfPartidasNewPartida);
                     }
                 }
             }
@@ -105,9 +129,9 @@ public class CuentaJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = cuenta.getId();
-                if (findCuenta(id) == null) {
-                    throw new NonexistentEntityException("The cuenta with id " + id + " no longer exists.");
+                Integer id = asiento.getId();
+                if (findAsiento(id) == null) {
+                    throw new NonexistentEntityException("The asiento with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -123,19 +147,24 @@ public class CuentaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cuenta cuenta;
+            Asiento asiento;
             try {
-                cuenta = em.getReference(Cuenta.class, id);
-                cuenta.getId();
+                asiento = em.getReference(Asiento.class, id);
+                asiento.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The cuenta with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asiento with id " + id + " no longer exists.", enfe);
             }
-            List<Partida> partidas = cuenta.getPartidas();
+            Periodo periodo = asiento.getPeriodo();
+            if (periodo != null) {
+                periodo.getAsientos().remove(asiento);
+                periodo = em.merge(periodo);
+            }
+            List<Partida> partidas = asiento.getPartidas();
             for (Partida partidasPartida : partidas) {
-                partidasPartida.setCuenta(null);
+                partidasPartida.setAsiento(null);
                 partidasPartida = em.merge(partidasPartida);
             }
-            em.remove(cuenta);
+            em.remove(asiento);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -144,19 +173,19 @@ public class CuentaJpaController implements Serializable {
         }
     }
 
-    public List<Cuenta> findCuentaEntities() {
-        return findCuentaEntities(true, -1, -1);
+    public List<Asiento> findAsientoEntities() {
+        return findAsientoEntities(true, -1, -1);
     }
 
-    public List<Cuenta> findCuentaEntities(int maxResults, int firstResult) {
-        return findCuentaEntities(false, maxResults, firstResult);
+    public List<Asiento> findAsientoEntities(int maxResults, int firstResult) {
+        return findAsientoEntities(false, maxResults, firstResult);
     }
 
-    private List<Cuenta> findCuentaEntities(boolean all, int maxResults, int firstResult) {
+    private List<Asiento> findAsientoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Cuenta.class));
+            cq.select(cq.from(Asiento.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -168,37 +197,23 @@ public class CuentaJpaController implements Serializable {
         }
     }
 
-    public Cuenta findCuenta(Integer id) {
+    public Asiento findAsiento(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Cuenta.class, id);
+            return em.find(Asiento.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getCuentaCount() {
+    public int getAsientoCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Cuenta> rt = cq.from(Cuenta.class);
+            Root<Asiento> rt = cq.from(Asiento.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
-    
-       public List<Cuenta> findCuentasByTipo(String tipo) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery(
-                    "SELECT c FROM Cuenta c WHERE c.tipo = :tipo ORDER BY c.codigo",
-                    Cuenta.class
-            )
-                    .setParameter("tipo", tipo)
-                    .getResultList();
         } finally {
             em.close();
         }
