@@ -4,7 +4,7 @@
  */
 package com.cooperativa.cooperativa.igu;
 
-import com.cooperativa.cooperativa.control.Controladora;
+import com.cooperativa.cooperativa.servicio.CuentaServicio;
 import com.cooperativa.cooperativa.control.Cuenta;
 import java.awt.Component;
 import java.util.List;
@@ -23,7 +23,7 @@ public class frmCuentas extends javax.swing.JFrame {
     String encabezados[] = {"Id", "Codigo", "Nombre", "Tipo", "Naturaleza", "Clasificacion",
         "Nivel", "Activa"
     };
-    Controladora control = new Controladora();
+    CuentaServicio control = new CuentaServicio();
 
     public frmCuentas() {
         initComponents();
