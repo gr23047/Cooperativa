@@ -14,6 +14,7 @@ import com.cooperativa.cooperativa.control.Partida;
 import com.cooperativa.cooperativa.persistencia.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,10 @@ public class CuentaJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-    public CuentaJpaController(){
-        emf=Persistence.createEntityManagerFactory("cooperativaPU");
+    public CuentaJpaController() {
+        emf = Persistence.createEntityManagerFactory("cooperativaPU");
     }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -189,8 +191,8 @@ public class CuentaJpaController implements Serializable {
             em.close();
         }
     }
-    
-       public List<Cuenta> findCuentasByTipo(String tipo) {
+
+    public List<Cuenta> findCuentasByTipo(String tipo) {
         EntityManager em = getEntityManager();
         try {
             return em.createQuery(
@@ -203,5 +205,34 @@ public class CuentaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Cuenta> findCuentasByCodido() {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT c FROM Cuenta c WHERE LENGTH(c.codigo) >= 4",
+                    Cuenta.class
+            ).getResultList();
+        } finally {
+            em.close();
+        }
+
+    }
+
+    public Cuenta findCuentaPorCodigo(String codigo) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT c FROM Cuenta c WHERE c.codigo = :codigo", 
+                    Cuenta.class
+            )
+                    .setParameter("codigo", codigo)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null; // si no encuentra nada
+        } finally {
+            em.close();
+        }
+    }
+
 }
