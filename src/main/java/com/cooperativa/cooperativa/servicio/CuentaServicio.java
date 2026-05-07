@@ -20,5 +20,12 @@ public class CuentaServicio {
     public List<Cuenta> cuentasTipo(String tipo) {
         return cuentaJPA.findCuentasByTipo(tipo);
     }
+    public List<Cuenta> cuentasCodigo() {
+        return cuentaJPA.findCuentasByCodido();
+    }
  
+    public Cuenta buscarPorCodigo(String codigo){
+        return cuentaJPA.findCuentaPorCodigo(codigo);
+    }
+    
 }
