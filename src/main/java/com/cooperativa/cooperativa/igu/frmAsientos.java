@@ -8,7 +8,7 @@ package com.cooperativa.cooperativa.igu;
  *
  * @author godofredo
  */
-public class frmAsientos extends javax.swing.JFrame {
+public class frmAsientos extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form frmAsientos
