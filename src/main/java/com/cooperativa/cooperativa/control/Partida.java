@@ -19,9 +19,6 @@ public class Partida implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-      @Column(name = "parcial")
-    private Double parcial;
-      
     @Column(name = "debe")
     private Double debe;
 
@@ -39,9 +36,8 @@ public class Partida implements Serializable {
     public Partida() {
     }
 
-    public Partida(Integer id, Double parcial, Double debe, Double haber, Cuenta cuenta, Asiento asiento) {
+    public Partida(Integer id, Double debe, Double haber, Cuenta cuenta, Asiento asiento) {
         this.id = id;
-          this.parcial =parcial;
         this.debe = debe;
         this.haber = haber;
         this.cuenta = cuenta;
@@ -54,14 +50,6 @@ public class Partida implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Double getParcial() {
-        return parcial;
-    }
-
-    public void setParcial(Double parcial) {
-        this.parcial = parcial;
     }
 
     public Double getDebe() {

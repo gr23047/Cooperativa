@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  * @author MINEDUCYT
  */
 public class panelPartidas extends javax.swing.JPanel {
-     LocalDate hoy = LocalDate.now();
+  LocalDate hoy = LocalDate.now();
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     String fechaFormateada = hoy.format(formato);
     Date fecha = Date.from(hoy.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -32,16 +32,10 @@ public class panelPartidas extends javax.swing.JPanel {
     PartidaServicio partidaserv = new PartidaServicio();
     AsientoServicio asientoserv = new AsientoServicio();
     List<Partida> listaTemporalPartidas = new ArrayList<>();
-
     DefaultTableModel modelo = new DefaultTableModel();
     String[] encabezados = {
-        "Codigo", "Cuenta", "Parcial", "Debe", "Haber"
+        "Codigo", "Cuenta", "Debe", "Haber"
     };
-
-    public boolean isCellEditable(int row, int column) {
-        // Solo las columnas 2 (Debe) y 3 (Haber) se pueden editar
-        return column == 2 || column == 3 || column == 4;
-    }
 
     Asiento asiento = new Asiento();
     Double totalDebe = 0.00;
@@ -52,94 +46,28 @@ public class panelPartidas extends javax.swing.JPanel {
      */
     public panelPartidas() {
         initComponents();
-
-        tblPartidas.setModel(modelo);
-
-        // AGREGAR EL LISTENER AQUÍ:
-        modelo.addTableModelListener(new javax.swing.event.TableModelListener() {
-            @Override
-            public void tableChanged(javax.swing.event.TableModelEvent e) {
-                // Si el cambio fue una edición en una celda
-                if (e.getType() == javax.swing.event.TableModelEvent.UPDATE) {
-                    recalcularTotales();
-                }
-            }
-        });
-
         ftxtFecha.setText(fechaFormateada);
         traerCuentas();
-
         modelo.setColumnIdentifiers(encabezados);
         tblPartidas.setModel(modelo);
     }
-
-    public void traerCuentas() {
+     public void traerCuentas() {
         List<Cuenta> cuentas = cuentaserv.cuentasCodigo();
         for (Cuenta cuenta : cuentas) {
-            cmb_Cuentas.addItem(cuenta.getCodigo() + "-" + cuenta.getNombre());
+            cmbCuentas.addItem(cuenta.getCodigo() + "-" + cuenta.getNombre());
         }
     }
-
-    public void traersubCuentas() {
-        String primerosCuatro = "";
-        Object seleccionado = cmb_Cuentas.getSelectedItem();
-
-        if (seleccionado != null) {
-            String textoCompleto = seleccionado.toString();
-
-            // 2. Verificamos que tenga al menos 4 caracteres para evitar errores
-            if (textoCompleto.length() >= 4) {
-                primerosCuatro = textoCompleto.substring(0, 4);
-            }
-        }
-
-        cmbSubCuentas.removeAllItems();
-        List<Cuenta> cuentas = cuentaserv.subcuentasCodigo(primerosCuatro);
-        for (Cuenta cuenta : cuentas) {
-            cmbSubCuentas.addItem(cuenta.getCodigo() + "-" + cuenta.getNombre());
-        }
-    }
-
-    public void actualizarTabla() {
+ public void actualizarTabla() {
         modelo.setRowCount(0);
         for (Partida partida : listaTemporalPartidas) {
             modelo.addRow(new Object[]{
                 partida.getCuenta().getCodigo(),
                 partida.getCuenta().getNombre(),
-                partida.getParcial(),
                 partida.getDebe(),
                 partida.getHaber()
             });
             tblPartidas.setModel(modelo);
-            recalcularTotales();
         }
-
-    }
-
-    private void recalcularTotales() {
-        double sumaDebe = 0;
-        double sumaHaber = 0;
-
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            try {
-                // Obtenemos los valores de las columnas 2 y 3
-                Object valorDebe = modelo.getValueAt(i, 3);
-                Object valorHaber = modelo.getValueAt(i, 4);
-
-                sumaDebe += (valorDebe != null) ? Double.parseDouble(valorDebe.toString()) : 0;
-                sumaHaber += (valorHaber != null) ? Double.parseDouble(valorHaber.toString()) : 0;
-            } catch (NumberFormatException ex) {
-                // Si el usuario escribe algo que no es un número, ignoramos o avisamos
-            }
-        }
-
-        // Actualizamos tus labels
-        lblTotalDebe.setText("Total Debe: $" + sumaDebe);
-        lblTotalHaber.setText("Total Haber: $" + sumaHaber);
-
-        // Si usas la variable global totalDebe, actualízala también
-        this.totalDebe = sumaDebe;
-         this.totalHaber = sumaHaber;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -163,12 +91,9 @@ public class panelPartidas extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         cmbTipo = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        cmb_Cuentas = new javax.swing.JComboBox<>();
+        cmbCuentas = new javax.swing.JComboBox<>();
         btnDebe = new javax.swing.JButton();
         btnHaber = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        cmbSubCuentas = new javax.swing.JComboBox<>();
-        btnparcial = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPartidas = new javax.swing.JTable();
         panelBotones = new javax.swing.JPanel();
@@ -197,12 +122,12 @@ public class panelPartidas extends javax.swing.JPanel {
         panelInputs.setBackground(new java.awt.Color(255, 255, 255));
         panelInputs.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 50, 10, 40));
         panelInputs.setPreferredSize(new java.awt.Dimension(1200, 150));
-        panelInputs.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelInputs.setLayout(new java.awt.GridLayout(3, 3, 20, 15));
 
         lblNumeroAsiento.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         lblNumeroAsiento.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblNumeroAsiento.setText("N# Asiento");
-        panelInputs.add(lblNumeroAsiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        panelInputs.add(lblNumeroAsiento);
 
         txtNumeroAsiento.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtNumeroAsiento.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -211,12 +136,12 @@ public class panelPartidas extends javax.swing.JPanel {
                 txtNumeroAsientoActionPerformed(evt);
             }
         });
-        panelInputs.add(txtNumeroAsiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 64, 22));
+        panelInputs.add(txtNumeroAsiento);
 
         jLabel2.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Fecha");
-        panelInputs.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, -1, -1));
+        panelInputs.add(jLabel2);
 
         try {
             ftxtFecha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -229,49 +154,39 @@ public class panelPartidas extends javax.swing.JPanel {
                 ftxtFechaActionPerformed(evt);
             }
         });
-        panelInputs.add(ftxtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 64, 22));
+        panelInputs.add(ftxtFecha);
 
         lblCantidad.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblCantidad.setText("Cantidad");
-        panelInputs.add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+        panelInputs.add(lblCantidad);
 
         txtCantidad.setPreferredSize(new java.awt.Dimension(100, 28));
-        panelInputs.add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 64, 22));
+        panelInputs.add(txtCantidad);
 
         jLabel3.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Tipo");
-        panelInputs.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, -1, -1));
+        panelInputs.add(jLabel3);
 
         cmbTipo.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Apertura", "Normal", "Cierre" }));
         cmbTipo.setMinimumSize(new java.awt.Dimension(150, 28));
-        panelInputs.add(cmbTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, 150, 28));
+        panelInputs.add(cmbTipo);
 
         jLabel4.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel4.setText("sub cuenta");
-        panelInputs.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, -1, -1));
+        jLabel4.setText("Cuenta");
+        panelInputs.add(jLabel4);
 
-        cmb_Cuentas.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        cmb_Cuentas.setPreferredSize(new java.awt.Dimension(250, 28));
-        cmb_Cuentas.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmb_CuentasItemStateChanged(evt);
-            }
-        });
-        cmb_Cuentas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmb_CuentasMouseClicked(evt);
-            }
-        });
-        cmb_Cuentas.addActionListener(new java.awt.event.ActionListener() {
+        cmbCuentas.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
+        cmbCuentas.setPreferredSize(new java.awt.Dimension(250, 28));
+        cmbCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmb_CuentasActionPerformed(evt);
+                cmbCuentasActionPerformed(evt);
             }
         });
-        panelInputs.add(cmb_Cuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 190, 24));
+        panelInputs.add(cmbCuentas);
 
         btnDebe.setBackground(new java.awt.Color(99, 156, 84));
         btnDebe.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -284,7 +199,7 @@ public class panelPartidas extends javax.swing.JPanel {
                 btnDebeActionPerformed(evt);
             }
         });
-        panelInputs.add(btnDebe, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 80, 72, 25));
+        panelInputs.add(btnDebe);
 
         btnHaber.setBackground(new java.awt.Color(99, 156, 84));
         btnHaber.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -297,34 +212,7 @@ public class panelPartidas extends javax.swing.JPanel {
                 btnHaberActionPerformed(evt);
             }
         });
-        panelInputs.add(btnHaber, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 80, 72, 25));
-
-        jLabel5.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel5.setText("Cuenta");
-        panelInputs.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
-
-        cmbSubCuentas.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        cmbSubCuentas.setPreferredSize(new java.awt.Dimension(250, 28));
-        cmbSubCuentas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbSubCuentasActionPerformed(evt);
-            }
-        });
-        panelInputs.add(cmbSubCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 220, 24));
-
-        btnparcial.setBackground(new java.awt.Color(99, 156, 84));
-        btnparcial.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        btnparcial.setForeground(new java.awt.Color(255, 255, 255));
-        btnparcial.setText("Parcial");
-        btnparcial.setBorderPainted(false);
-        btnparcial.setPreferredSize(new java.awt.Dimension(100, 30));
-        btnparcial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnparcialActionPerformed(evt);
-            }
-        });
-        panelInputs.add(btnparcial, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 80, 72, 25));
+        panelInputs.add(btnHaber);
 
         panelContenido.add(panelInputs, java.awt.BorderLayout.NORTH);
 
@@ -361,6 +249,42 @@ public class panelPartidas extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
  
+    private void btnDebeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDebeActionPerformed
+        Partida partida = new Partida();
+        Asiento asiento = new Asiento();
+        Double debe = Double.parseDouble(txtCantidad.getText());
+        partida.setDebe(debe);
+        partida.setHaber(0.0);
+        partida.setAsiento(asiento);
+        String cuentaSeleccionada = cmbCuentas.getSelectedItem().toString();
+        String[] partes = cuentaSeleccionada.split("-");
+        String codigo = partes[0];
+        partida.setCuenta(cuentaserv.buscarPorCodigo(codigo));
+        listaTemporalPartidas.add(partida);
+        totalDebe += debe;
+        lblTotalDebe.setText("Total Debe: $" + totalDebe);
+        JOptionPane.showMessageDialog(this, "Partida agregada al debe (Temporal)");
+        actualizarTabla();
+    }//GEN-LAST:event_btnDebeActionPerformed
+
+    private void btnHaberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHaberActionPerformed
+        Partida partida = new Partida();
+        Asiento asiento = new Asiento();
+        Double haber = Double.parseDouble(txtCantidad.getText());
+        partida.setAsiento(asiento);
+        partida.setHaber(haber);
+        partida.setDebe(0.0);
+        String cuentaSeleccionada = cmbCuentas.getSelectedItem().toString();
+        String[] partes = cuentaSeleccionada.split("-");
+        String codigo = partes[0];
+        partida.setCuenta(cuentaserv.buscarPorCodigo(codigo));
+        listaTemporalPartidas.add(partida);
+        totalHaber += haber;
+        lblTotalHaber.setText("Total Haber: $" + totalHaber);
+        JOptionPane.showMessageDialog(this, "Partida agregada al haber (Temporal)");
+        actualizarTabla();
+    }//GEN-LAST:event_btnHaberActionPerformed
+
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         asiento.setNumero(txtNumeroAsiento.getText());
         asiento.setFecha(fecha);
@@ -396,6 +320,13 @@ public class panelPartidas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    
+    
+   
+    
+    
+    
+    
     private void txtNumeroAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroAsientoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumeroAsientoActionPerformed
@@ -404,110 +335,22 @@ public class panelPartidas extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_ftxtFechaActionPerformed
 
-    private void cmb_CuentasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_CuentasItemStateChanged
+    private void cmbCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCuentasActionPerformed
         // TODO add your handling code here:
-       this.traersubCuentas();
-    }//GEN-LAST:event_cmb_CuentasItemStateChanged
+    }//GEN-LAST:event_cmbCuentasActionPerformed
 
-    private void cmb_CuentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmb_CuentasMouseClicked
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmb_CuentasMouseClicked
-
-    private void cmb_CuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_CuentasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmb_CuentasActionPerformed
-
-    private void btnDebeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDebeActionPerformed
-        Partida partida = new Partida();
-        Asiento asiento = new Asiento();
-        Double debe = Double.parseDouble(txtCantidad.getText());
-
-        partida.setDebe(debe);
-        partida.setHaber(0.0);
-        partida.setAsiento(asiento);
-        String cuentaSeleccionada = cmb_Cuentas.getSelectedItem().toString();
-        String[] partes = cuentaSeleccionada.split("-");
-        String codigo = partes[0];
-        partida.setCuenta(cuentaserv.buscarPorCodigo(codigo));
-        listaTemporalPartidas.add(partida);
-
-        this.recalcularTotales();
-        JOptionPane.showMessageDialog(this, "Partida agregada al debe (Temporal)");
-        actualizarTabla();
-    }//GEN-LAST:event_btnDebeActionPerformed
-
-    private void btnHaberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHaberActionPerformed
-        Partida partida = new Partida();
-        Asiento asiento = new Asiento();
-        Double haber = Double.parseDouble(txtCantidad.getText());
-        partida.setAsiento(asiento);
-
-        partida.setHaber(haber);
-        partida.setDebe(0.0);
-        String cuentaSeleccionada = cmb_Cuentas.getSelectedItem().toString();
-        String[] partes = cuentaSeleccionada.split("-");
-        String codigo = partes[0];
-        partida.setCuenta(cuentaserv.buscarPorCodigo(codigo));
-        listaTemporalPartidas.add(partida);
-
-        this.recalcularTotales();
-        JOptionPane.showMessageDialog(this, "Partida agregada al haber (Temporal)");
-        actualizarTabla();
-    }//GEN-LAST:event_btnHaberActionPerformed
-
-    private void cmbSubCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSubCuentasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbSubCuentasActionPerformed
-
-    private void btnparcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnparcialActionPerformed
-        Partida partida = new Partida();
-        Asiento asiento = new Asiento();
-        Double parcial = Double.parseDouble(txtCantidad.getText());
-
-        partida.setParcial(parcial);
-        partida.setDebe(0.0);
-        partida.setHaber(0.0);
-        partida.setAsiento(asiento);
-        String cuentaSeleccionada = cmbSubCuentas.getSelectedItem().toString();
-
-        // Verificamos que tenga el largo mínimo para no dar error
-        if (cuentaSeleccionada.length() >= 7) {
-            String codigoExacto = cuentaSeleccionada.substring(0, 7); // Corta exactamente "1111-11"
-
-            // Ahora buscamos en la base de datos con el código completo
-            Cuenta subCuenta = cuentaserv.buscarSubCuenta(codigoExacto);
-            partida.setCuenta(subCuenta);
-            listaTemporalPartidas.add(partida);
-
-            this.recalcularTotales();
-            JOptionPane.showMessageDialog(this, "Partida agregada al debe (Temporal)");
-            actualizarTabla();
-        }
-    }//GEN-LAST:event_btnparcialActionPerformed
-
-    
-    
-   
-    
-    
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDebe;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnHaber;
-    private javax.swing.JButton btnparcial;
-    private javax.swing.JComboBox<String> cmbSubCuentas;
+    private javax.swing.JComboBox<String> cmbCuentas;
     private javax.swing.JComboBox<String> cmbTipo;
-    private javax.swing.JComboBox<String> cmb_Cuentas;
     private javax.swing.JFormattedTextField ftxtFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblNumeroAsiento;

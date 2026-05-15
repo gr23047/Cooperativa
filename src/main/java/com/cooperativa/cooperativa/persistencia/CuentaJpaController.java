@@ -38,7 +38,7 @@ public class CuentaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-       public void create(Cuenta cuenta) {
+    public void create(Cuenta cuenta) {
         if (cuenta.getPartidas() == null) {
             cuenta.setPartidas(new ArrayList<Partida>());
         }
@@ -210,7 +210,7 @@ public class CuentaJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             return em.createQuery(
-                    "SELECT c FROM Cuenta c WHERE LENGTH(c.codigo) = 4",
+                    "SELECT c FROM Cuenta c WHERE LENGTH(c.codigo) >= 4",
                     Cuenta.class
             ).getResultList();
         } finally {
@@ -218,39 +218,6 @@ public class CuentaJpaController implements Serializable {
         }
 
     }
-    
-    public Cuenta buscarPorCodigoExacto(String codigoRecibido) {
-    EntityManager em = getEntityManager();
-    try {
-        return em.createQuery(
-                "SELECT c FROM Cuenta c WHERE c.codigo = :cod", 
-                Cuenta.class
-        )
-        .setParameter("cod", codigoRecibido) // Aquí pasas el "1111-11"
-        .getSingleResult(); // Usamos SingleResult porque el código debería ser único
-    } catch (javax.persistence.NoResultException e) {
-        // Si no encuentra la cuenta, devolvemos null en lugar de que truene el programa
-        return null; 
-    } finally {
-        em.close();
-    }
-}
-    
-    
-    
-       public List<Cuenta> findSubCuentasByCodigo(String numero) {
-    EntityManager em = getEntityManager();
-    try {
-        return em.createQuery(
-                "SELECT c FROM Cuenta c WHERE c.codigo LIKE :filtro AND LENGTH(c.codigo) > 4",
-                Cuenta.class
-        )
-        .setParameter("filtro", numero + "%") // Agregamos el comodín aquí
-        .getResultList();
-    } finally {
-        em.close();
-    }
-}
 
     public Cuenta findCuentaPorCodigo(String codigo) {
         EntityManager em = getEntityManager();
