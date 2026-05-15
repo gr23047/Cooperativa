@@ -29,9 +29,10 @@ public class PartidaJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-     public PartidaJpaController(){
-        emf=Persistence.createEntityManagerFactory("cooperativaPU");
+    public PartidaJpaController() {
+        emf = Persistence.createEntityManagerFactory("cooperativaPU");
     }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -196,5 +197,36 @@ public class PartidaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Object[]> getMayorizado(Integer periodoId) {
+        EntityManager em = getEntityManager();
+        try {
+            String sql = """
+        SELECT 
+            c.codigo,
+            c.nombre,
+            c.tipo,
+            c.naturaleza,
+            COALESCE(SUM(p.debe), 0)  AS total_debe,
+            COALESCE(SUM(p.haber), 0) AS total_haber,
+            CASE 
+                WHEN c.naturaleza = 'Deudora'   THEN COALESCE(SUM(p.debe),0) - COALESCE(SUM(p.haber),0)
+                WHEN c.naturaleza = 'Acreedora' THEN COALESCE(SUM(p.haber),0) - COALESCE(SUM(p.debe),0)
+            END AS saldo
+        FROM partidas p
+        INNER JOIN cuentas  c ON c.id = p.cuenta_id
+        INNER JOIN asientos a ON a.id = p.asiento_id
+        WHERE a.periodo_id = ?1
+          AND c.nivel >= 3
+        GROUP BY c.id, c.codigo, c.nombre, c.tipo, c.naturaleza
+        ORDER BY c.codigo
+    """;
+            // Se usa createNativeQuery y el índice 1 para el ?1
+            return em.createNativeQuery(sql)
+                    .setParameter(1, periodoId)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }
