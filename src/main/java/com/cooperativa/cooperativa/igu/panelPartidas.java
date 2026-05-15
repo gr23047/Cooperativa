@@ -7,9 +7,11 @@ package com.cooperativa.cooperativa.igu;
 import com.cooperativa.cooperativa.control.Asiento;
 import com.cooperativa.cooperativa.control.Cuenta;
 import com.cooperativa.cooperativa.control.Partida;
+import com.cooperativa.cooperativa.control.Periodo;
 import com.cooperativa.cooperativa.servicio.AsientoServicio;
 import com.cooperativa.cooperativa.servicio.CuentaServicio;
 import com.cooperativa.cooperativa.servicio.PartidaServicio;
+import com.cooperativa.cooperativa.servicio.PeriodoServicio;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +33,8 @@ public class panelPartidas extends javax.swing.JPanel {
     CuentaServicio cuentaserv = new CuentaServicio();
     PartidaServicio partidaserv = new PartidaServicio();
     AsientoServicio asientoserv = new AsientoServicio();
+    PeriodoServicio periodoserv=new PeriodoServicio();
+    Periodo periodo=new Periodo();
     List<Partida> listaTemporalPartidas = new ArrayList<>();
     DefaultTableModel modelo = new DefaultTableModel();
     String[] encabezados = {
@@ -286,6 +290,8 @@ public class panelPartidas extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHaberActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        periodo=periodoserv.buscarPeriodo(1);
+        asiento.setPeriodo(periodo);
         asiento.setNumero(txtNumeroAsiento.getText());
         asiento.setFecha(fecha);
         asiento.setCreadoEn(fecha);
