@@ -238,7 +238,7 @@ p.setVisible(true);
     }//GEN-LAST:event_btnCuentasActionPerformed
 
     private void btnMayorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMayorActionPerformed
-       // mostrarPanel(new panelMayor());
+        mostrarPanel(new panelMayor());
     }//GEN-LAST:event_btnMayorActionPerformed
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
