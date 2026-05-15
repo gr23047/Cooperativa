@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e76105f6-257f-4960-83fa-30109c0a9cfb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/Cooperativa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/Cooperativa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/igu/frmAsientos.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/igu/frmPartidas.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/igu/frmAsientos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/igu/frmPartidas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/persistencia/CuentaJpaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/persistencia/CuentaJpaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/servicio/CuentaServicio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cooperativa/cooperativa/servicio/CuentaServicio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/Cooperativa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/control/Controladora.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/control/Cuenta.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/Principal$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/Principal$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/Principal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/Principal.form" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/igu/frmCuentas.form" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/persistencia/CuentaJpaController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/persistencia/exceptions/IllegalOrphanException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/persistencia/exceptions/NonexistentEntityException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/cooperativa/cooperativa/persistencia/exceptions/PreexistingEntityException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="3DP4OvXAIKxXY7eKSPrvmEoHBx1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Cooperativa.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/godofredo/Escritorio/Sistemas Contables/Cooperativa",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e76105f6-257f-4960-83fa-30109c0a9cfb" name="Changes" comment="" />
+      <created>1778170343106</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1778170343106</updated>
+      <workItem from="1778170344307" duration="905000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
