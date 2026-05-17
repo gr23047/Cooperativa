@@ -111,7 +111,7 @@ public class panelMayor extends javax.swing.JPanel {
     String periodoTexto = cmbPeriodos.getSelectedItem().toString();
     String[] partes=periodoTexto.split("-");
     String id=partes[0];
-    if (id == null) {
+    if (periodoTexto.contains("<Seleccione el periodo>") ) {
         JOptionPane.showMessageDialog(this, "Selecciona un período.");
         return;
     }
