@@ -3,33 +3,53 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.cooperativa.cooperativa.igu;
+
 import com.cooperativa.cooperativa.servicio.CuentaServicio;
 import com.cooperativa.cooperativa.control.Cuenta;
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author MINEDUCYT
- */
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class panelCuentas extends javax.swing.JPanel {
-DefaultTableModel modelo = new DefaultTableModel();
-CuentaServicio control = new CuentaServicio();
 
-public panelCuentas() {
-    initComponents();
-    personalizarTabla();
-    String encabezados[] = {
-        "Id", "Codigo", "Nombre", "Tipo",
-        "Naturaleza", "Clasificacion", "Nivel", "Activa"
-    };
+    DefaultTableModel modelo = new DefaultTableModel();
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
+    CuentaServicio control = new CuentaServicio();
 
-    modelo.setColumnIdentifiers(encabezados);
-    tblCuentas.setModel(modelo);
+    public panelCuentas() {
+        initComponents();
+        personalizarTabla();
+        String encabezados[] = {
+            "Id", "Codigo", "Nombre", "Tipo",
+            "Naturaleza", "Clasificacion", "Nivel", "Activa"
+        };
 
-    cargarCuentas(); // si tienes este método
-}
+        modelo.setColumnIdentifiers(encabezados);
+        tblCuentas.setModel(modelo);
+        tblCuentas.setRowSorter(sorter);
+        cargarCuentas(); // si tienes este método
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrar();
+            }
+        });
+    }
+
     public void cargarCuentas() {
         List<Cuenta> cuentas = control.verCuentas();
         for (Cuenta cuenta : cuentas) {
@@ -37,26 +57,40 @@ public panelCuentas() {
                 cuenta.getId(), cuenta.getCodigo(), cuenta.getNombre(), cuenta.getTipo(),
                 cuenta.getNaturaleza(), cuenta.getClasificacion(), cuenta.getNivel(), cuenta.getActiva()
             });
-            tblCuentas.setModel(modelo);
         }
-    }
-   
-    public void llenarTabla(List<Cuenta> datos, DefaultTableModel modelo) {
-    for (Cuenta cuenta : datos) {
-        modelo.addRow(new Object[]{
-            cuenta.getId(),
-            cuenta.getCodigo(),
-            cuenta.getNombre(),
-            cuenta.getTipo(),
-            cuenta.getNaturaleza(),
-            cuenta.getClasificacion(),
-            cuenta.getNivel(),
-            cuenta.getActiva()
-        });
+        tblCuentas.setModel(modelo);
+
     }
 
-    tblCuentas.setModel(modelo);
-}
+    private void filtrar() {
+        String texto = txtBuscar.getText();
+
+        // Si el campo está vacío, muestra todo
+        if (texto.trim().length() == 0) {
+            sorter.setRowFilter(null);
+        } else {
+            // El (?i) sirve para que ignore mayúsculas y minúsculas (Case Insensitive)
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+        }
+    }
+
+    public void llenarTabla(List<Cuenta> datos, DefaultTableModel modelo) {
+        for (Cuenta cuenta : datos) {
+            modelo.addRow(new Object[]{
+                cuenta.getId(),
+                cuenta.getCodigo(),
+                cuenta.getNombre(),
+                cuenta.getTipo(),
+                cuenta.getNaturaleza(),
+                cuenta.getClasificacion(),
+                cuenta.getNivel(),
+                cuenta.getActiva()
+            });
+        }
+
+        tblCuentas.setModel(modelo);
+    }
+
     // Renderizador personalizado para el efecto cebra para que se vea bien bonito
     private void personalizarTabla() {
         java.awt.Color verdeFila = new java.awt.Color(240, 250, 245); // Un verde menta muy suave
@@ -91,7 +125,7 @@ public panelCuentas() {
         tblCuentas.getTableHeader().setBackground(new java.awt.Color(3, 102, 102));// Filas más altas para que respire el diseño
         tblCuentas.getTableHeader().setOpaque(true);
     }
- 
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -101,6 +135,7 @@ public panelCuentas() {
         jLabel1 = new javax.swing.JLabel();
         panelContenedorCuentas = new javax.swing.JPanel();
         panelfiltros = new javax.swing.JPanel();
+        txtBuscar = new javax.swing.JTextField();
         rbtnActivo = new javax.swing.JRadioButton();
         rbtnPasivo = new javax.swing.JRadioButton();
         rbtnPatrimonio = new javax.swing.JRadioButton();
@@ -130,6 +165,12 @@ public panelCuentas() {
         panelfiltros.setBackground(new java.awt.Color(255, 255, 255));
         panelfiltros.setAlignmentX(10.0F);
 
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+
         grupo.add(rbtnActivo);
         rbtnActivo.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         rbtnActivo.setText("Activo");
@@ -139,7 +180,6 @@ public panelCuentas() {
                 rbtnActivoActionPerformed(evt);
             }
         });
-        panelfiltros.add(rbtnActivo);
 
         grupo.add(rbtnPasivo);
         rbtnPasivo.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -150,7 +190,6 @@ public panelCuentas() {
                 rbtnPasivoActionPerformed(evt);
             }
         });
-        panelfiltros.add(rbtnPasivo);
 
         grupo.add(rbtnPatrimonio);
         rbtnPatrimonio.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -161,7 +200,6 @@ public panelCuentas() {
                 rbtnPatrimonioActionPerformed(evt);
             }
         });
-        panelfiltros.add(rbtnPatrimonio);
 
         grupo.add(rbtnIngreso);
         rbtnIngreso.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -172,7 +210,6 @@ public panelCuentas() {
                 rbtnIngresoActionPerformed(evt);
             }
         });
-        panelfiltros.add(rbtnIngreso);
 
         grupo.add(rbtnGasto);
         rbtnGasto.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -183,7 +220,37 @@ public panelCuentas() {
                 rbtnGastoActionPerformed(evt);
             }
         });
-        panelfiltros.add(rbtnGasto);
+
+        javax.swing.GroupLayout panelfiltrosLayout = new javax.swing.GroupLayout(panelfiltros);
+        panelfiltros.setLayout(panelfiltrosLayout);
+        panelfiltrosLayout.setHorizontalGroup(
+            panelfiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelfiltrosLayout.createSequentialGroup()
+                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbtnActivo)
+                .addGap(5, 5, 5)
+                .addComponent(rbtnPasivo)
+                .addGap(5, 5, 5)
+                .addComponent(rbtnPatrimonio)
+                .addGap(5, 5, 5)
+                .addComponent(rbtnIngreso)
+                .addGap(5, 5, 5)
+                .addComponent(rbtnGasto))
+        );
+        panelfiltrosLayout.setVerticalGroup(
+            panelfiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelfiltrosLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(panelfiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelfiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rbtnActivo)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rbtnPasivo)
+                    .addComponent(rbtnPatrimonio)
+                    .addComponent(rbtnIngreso)
+                    .addComponent(rbtnGasto)))
+        );
 
         panelContenedorCuentas.add(panelfiltros, java.awt.BorderLayout.NORTH);
 
@@ -230,6 +297,10 @@ public panelCuentas() {
         llenarTabla(pasivo, modelo);
     }//GEN-LAST:event_rbtnPasivoActionPerformed
 
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+
+    }//GEN-LAST:event_txtBuscarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup grupo;
     private javax.swing.JLabel jLabel1;
@@ -243,5 +314,6 @@ public panelCuentas() {
     private javax.swing.JRadioButton rbtnPasivo;
     private javax.swing.JRadioButton rbtnPatrimonio;
     private javax.swing.JTable tblCuentas;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }
