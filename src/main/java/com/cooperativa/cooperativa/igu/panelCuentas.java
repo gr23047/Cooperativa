@@ -52,14 +52,7 @@ public class panelCuentas extends javax.swing.JPanel {
 
     public void cargarCuentas() {
         List<Cuenta> cuentas = control.verCuentas();
-        for (Cuenta cuenta : cuentas) {
-            modelo.addRow(new Object[]{
-                cuenta.getId(), cuenta.getCodigo(), cuenta.getNombre(), cuenta.getTipo(),
-                cuenta.getNaturaleza(), cuenta.getClasificacion(), cuenta.getNivel(), cuenta.getActiva()
-            });
-        }
-        tblCuentas.setModel(modelo);
-
+        llenarTabla(cuentas, modelo);
     }
 
     private void filtrar() {
