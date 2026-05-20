@@ -1,6 +1,8 @@
-
 package com.cooperativa.cooperativa.igu;
+
+import com.cooperativa.cooperativa.servicio.PeriodoServicio;
 import javax.swing.JPanel;
+
 /**
  *
  * @author godofredo
@@ -18,7 +20,7 @@ public class Principal extends javax.swing.JFrame {
         this.setSize(1366, 768);
         setLocationRelativeTo(null);
         // Cursor de manita al pasar sobre el label
-    lblMenu.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+        lblMenu.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
     }
 
     private void toggleSidebar() {
@@ -47,7 +49,7 @@ public class Principal extends javax.swing.JFrame {
     private void mostrarPanel(JPanel p) {
         panelActivo = p;
         PanelContenido.removeAll();
-p.setVisible(true);
+        p.setVisible(true);
         // En BorderLayout, el componente en CENTER se estira automáticamente
         PanelContenido.add(p, java.awt.BorderLayout.CENTER);
 
@@ -55,7 +57,6 @@ p.setVisible(true);
         PanelContenido.repaint();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -234,7 +235,7 @@ p.setVisible(true);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentasActionPerformed
-      mostrarPanel(new panelCuentas());       
+        mostrarPanel(new panelCuentas());
     }//GEN-LAST:event_btnCuentasActionPerformed
 
     private void btnMayorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMayorActionPerformed
@@ -250,22 +251,22 @@ p.setVisible(true);
     }//GEN-LAST:event_btnDiarioActionPerformed
 
     private void btnCierreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCierreActionPerformed
-       // mostrarPanel(new panelCierre());
+        // mostrarPanel(new panelCierre());
     }//GEN-LAST:event_btnCierreActionPerformed
 
     private void btnBalanzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBalanzaActionPerformed
-       // mostrarPanel(new panelComprobacion());
+        PeriodoServicio periodoserv=new PeriodoServicio();
+        mostrarPanel(new panelBalanzaComprobacion(periodoserv.buscarPeriodo(1)));
     }//GEN-LAST:event_btnBalanzaActionPerformed
 
     private void btnEstadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadosActionPerformed
-       // mostrarPanel(new panelEstado());
+        // mostrarPanel(new panelEstado());
     }//GEN-LAST:event_btnEstadosActionPerformed
 
     private void lblMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMenuMouseClicked
-      toggleSidebar();
+        toggleSidebar();
     }//GEN-LAST:event_lblMenuMouseClicked
 
-  
     /**
      * @param args the command line arguments
      */
