@@ -229,4 +229,45 @@ public class PartidaJpaController implements Serializable {
             em.close();
         }
     }
+    
+    
+    public List<Object[]> getBalanzaComprobacion(Integer periodoId) {
+    EntityManager em = getEntityManager();
+    try {
+        String sql = """
+                     SELECT
+                         c.codigo,
+                         c.nombre,
+                         COALESCE(SUM(p.debe),  0) AS suma_debe,
+                         COALESCE(SUM(p.haber), 0) AS suma_haber,
+                     
+                         CASE
+                             WHEN COALESCE(SUM(p.debe), 0) > COALESCE(SUM(p.haber), 0)
+                             THEN COALESCE(SUM(p.debe), 0) - COALESCE(SUM(p.haber), 0)
+                             ELSE 0
+                         END AS saldo_deudor,
+                     
+                         CASE
+                             WHEN COALESCE(SUM(p.haber), 0) > COALESCE(SUM(p.debe), 0)
+                             THEN COALESCE(SUM(p.haber), 0) - COALESCE(SUM(p.debe), 0)
+                             ELSE 0
+                         END AS saldo_acreedor
+                     
+                     FROM partidas p
+                     INNER JOIN cuentas  c ON c.id = p.cuenta_id
+                     INNER JOIN asientos a ON a.id = p.asiento_id
+                     WHERE a.periodo_id = ?1
+                       AND c.nivel >= 3
+                     GROUP BY c.id, c.codigo, c.nombre, c.naturaleza
+                     ORDER BY c.codigo
+                     """
+           ;
+        return em.createNativeQuery(sql)
+                 .setParameter(1, periodoId)
+                 .getResultList();
+    } finally {
+        em.close();
+    }
+}
+    
 }
