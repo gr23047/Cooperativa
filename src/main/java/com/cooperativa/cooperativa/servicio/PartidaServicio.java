@@ -14,5 +14,7 @@ public class PartidaServicio {
     public List<Object[]> getMayorizado(Integer id) {
         return partidaJPA.getMayorizado(id);
     }
-    
+    public List<Object[]> getBalanza(Integer id){
+        return partidaJPA.getBalanzaComprobacion(id);
+    }
 }

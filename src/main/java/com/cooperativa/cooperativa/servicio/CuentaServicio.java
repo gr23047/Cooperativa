@@ -27,5 +27,7 @@ public class CuentaServicio {
     public Cuenta buscarPorCodigo(String codigo){
         return cuentaJPA.findCuentaPorCodigo(codigo);
     }
+
+   
     
 }
